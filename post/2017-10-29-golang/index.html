@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Tomofumi Chiba">
+<meta name="description" content="Describe your website">
+<meta name="generator" content="Hugo 0.30" />
+<title>Go言語(golang)の学習がてら Healthcheck Notifier を作ってみた</title>
+<link rel="shortcut icon" href="https://example.org/images/favicon.ico">
+<link rel="stylesheet" href="https://example.org/css/style.css">
+<link rel="stylesheet" href="https://example.org/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://example.org/css/monosocialiconsfont.css">
+
+
+
+<link href="https://example.org/index.xml" rel="alternate" type="application/rss+xml" title="Hugo Cactus Theme" />
+
+
+<meta property="og:title" content="Go言語(golang)の学習がてら Healthcheck Notifier を作ってみた" />
+<meta property="og:description" content="以前から、Go言語(golang)をちょっとやってみたりしてたんですが、実用的なものを作ってみたいと思い、 Healthcheck Notifier というものを作ってみました。
+一つソースファイルでできているとてもシンプルなものです。
+Healthcheck Notifier
+Webアプリケーションに対し、ヘルスチェックのリクエストを投げ、ステータスコード200以外が返答された場合、Alert を HipChat やメールで通知します。
+クイックスタート リリースページからバイナリをダウンロードします。
+Windows, macOS, Linux のバイナリがあります。
+ダウンロードしたバイナリを以下のように実行するだけで起動します(Linuxの例)。
+./healthcheck-notifier-linux-amd64  Webアプリとして起動するので、ヘルスチェックの状態を Webブラウザから確認できます。
+以下のURLをWebブラウザで開いてみてください。
+http://localhost:18888/
+以下は、スクリーンショットです。
+仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
+起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
+{ &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.org/post/2017-10-29-golang/" />
+
+
+
+<meta property="article:published_time" content="2017-10-29T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-10-29T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Go言語(golang)の学習がてら Healthcheck Notifier を作ってみた">
+<meta itemprop="description" content="以前から、Go言語(golang)をちょっとやってみたりしてたんですが、実用的なものを作ってみたいと思い、 Healthcheck Notifier というものを作ってみました。
+一つソースファイルでできているとてもシンプルなものです。
+Healthcheck Notifier
+Webアプリケーションに対し、ヘルスチェックのリクエストを投げ、ステータスコード200以外が返答された場合、Alert を HipChat やメールで通知します。
+クイックスタート リリースページからバイナリをダウンロードします。
+Windows, macOS, Linux のバイナリがあります。
+ダウンロードしたバイナリを以下のように実行するだけで起動します(Linuxの例)。
+./healthcheck-notifier-linux-amd64  Webアプリとして起動するので、ヘルスチェックの状態を Webブラウザから確認できます。
+以下のURLをWebブラウザで開いてみてください。
+http://localhost:18888/
+以下は、スクリーンショットです。
+仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
+起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
+{ &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example.">
+
+
+<meta itemprop="datePublished" content="2017-10-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2017-10-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="338">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Go言語(golang)の学習がてら Healthcheck Notifier を作ってみた"/>
+<meta name="twitter:description" content="以前から、Go言語(golang)をちょっとやってみたりしてたんですが、実用的なものを作ってみたいと思い、 Healthcheck Notifier というものを作ってみました。
+一つソースファイルでできているとてもシンプルなものです。
+Healthcheck Notifier
+Webアプリケーションに対し、ヘルスチェックのリクエストを投げ、ステータスコード200以外が返答された場合、Alert を HipChat やメールで通知します。
+クイックスタート リリースページからバイナリをダウンロードします。
+Windows, macOS, Linux のバイナリがあります。
+ダウンロードしたバイナリを以下のように実行するだけで起動します(Linuxの例)。
+./healthcheck-notifier-linux-amd64  Webアプリとして起動するので、ヘルスチェックの状態を Webブラウザから確認できます。
+以下のURLをWebブラウザで開いてみてください。
+http://localhost:18888/
+以下は、スクリーンショットです。
+仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
+起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
+{ &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example."/>
+<meta name="twitter:site" content="@https://www.twitter.com/tomofummy"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://example.org/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+ 		<a href='/about/'>About</a>
+  	
+
+	
+		<a class="cta" href="https://example.org/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Go言語(golang)の学習がてら Healthcheck Notifier を作ってみた</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        October 29, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<p>以前から、Go言語(golang)をちょっとやってみたりしてたんですが、実用的なものを作ってみたいと思い、 <strong>Healthcheck Notifier</strong> というものを作ってみました。<br />
+一つソースファイルでできているとてもシンプルなものです。</p>
+
+<p><a href="https://github.com/chibat/healthcheck-notifier">Healthcheck Notifier</a></p>
+
+<p>Webアプリケーションに対し、ヘルスチェックのリクエストを投げ、ステータスコード200以外が返答された場合、Alert を HipChat やメールで通知します。</p>
+
+<h2 id="クイックスタート">クイックスタート</h2>
+
+<p><a href="https://github.com/chibat/healthcheck-notifier/releases">リリースページ</a>からバイナリをダウンロードします。<br />
+Windows, macOS, Linux のバイナリがあります。</p>
+
+<p>ダウンロードしたバイナリを以下のように実行するだけで起動します(Linuxの例)。</p>
+
+<pre><code>./healthcheck-notifier-linux-amd64
+</code></pre>
+
+<p>Webアプリとして起動するので、ヘルスチェックの状態を Webブラウザから確認できます。<br />
+以下のURLをWebブラウザで開いてみてください。<br />
+<a href="http://localhost:18888/">http://localhost:18888/</a></p>
+
+<p>以下は、スクリーンショットです。</p>
+
+<p><img src="{{ site.baseurl }}/images/monitor.png" alt="monitor" /></p>
+
+<h2 id="仕様">仕様</h2>
+
+<ul>
+<li>監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。</li>
+<li>ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。</li>
+</ul>
+
+<h2 id="設定ファイル">設定ファイル</h2>
+
+<p>Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。<br />
+起動したディレクトリに以下のような<code>config.json</code>が作成されていると思います。</p>
+
+<pre><code class="language-json">{
+    &quot;cron&quot;: &quot;*/10 * * * * *&quot;,
+    &quot;port&quot;: 18888,
+    &quot;hipchat-proxy&quot;: &quot;&quot;,
+    &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;,
+    &quot;smtp-server&quot;: &quot;localhost:25&quot;,
+    &quot;mail-address-from&quot;: &quot;from@example.com&quot;,
+    &quot;apps&quot;: [
+        {
+            &quot;name&quot;: &quot;self&quot;,
+            &quot;url&quot;: &quot;http://localhost:18888/&quot;,
+            &quot;proxy&quot;: &quot;&quot;,
+            &quot;hipchat-room&quot;: &quot;1234567&quot;,
+            &quot;hipchat-token&quot;: &quot;&quot;,
+            &quot;mail-address-to-down&quot;: [&quot;to1@example.com&quot;, &quot;to2@example.com&quot;],
+            &quot;mail-address-to-up&quot;: [&quot;to1@example.com&quot;, &quot;to2@example.com&quot;]
+        }
+    ]
+}
+</code></pre>
+
+<p>設定内容については以下です。</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">プロパティ</th>
+<th align="left">説明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">cron</td>
+<td align="left">ヘルスチェックの周期(クーロン形式)</td>
+</tr>
+
+<tr>
+<td align="left">port</td>
+<td align="left">モニター用のWeb画面が仕様するポート番号</td>
+</tr>
+
+<tr>
+<td align="left">hipchat-proxy</td>
+<td align="left">HipChat通知で使用するプロキシ</td>
+</tr>
+
+<tr>
+<td align="left">hipchat-subdomain</td>
+<td align="left">利用しているHipChatのサブドメイン</td>
+</tr>
+
+<tr>
+<td align="left">stmp-server</td>
+<td align="left">メール通知で使用するSMTPサーバ</td>
+</tr>
+
+<tr>
+<td align="left">mail-address-from</td>
+<td align="left">メール通知するときのFROMアドレス</td>
+</tr>
+
+<tr>
+<td align="left">apps[].name</td>
+<td align="left">監視対象のアプリケーション名称</td>
+</tr>
+
+<tr>
+<td align="left">apps[].url</td>
+<td align="left">監視対象のURL</td>
+</tr>
+
+<tr>
+<td align="left">apps[].proxy</td>
+<td align="left">ヘルスチェックのリクエストで使用するプロキシ</td>
+</tr>
+
+<tr>
+<td align="left">apps[].hipchat-room</td>
+<td align="left">通知する HipChat Room の ID</td>
+</tr>
+
+<tr>
+<td align="left">apps[].hipchat-token</td>
+<td align="left">HipChat のトークン</td>
+</tr>
+
+<tr>
+<td align="left">apps[].mail-address-to-down</td>
+<td align="left">ヘルスチェックエラーになった場合に送るメールアドレス</td>
+</tr>
+
+<tr>
+<td align="left">apps[].mail-address-to-up</td>
+<td align="left">ヘルスチェックエラー状態からヘルスチェック成功した場合に送るメールアドレス</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="golang-について">golang について</h2>
+
+<p>golang について覚えたことや感じたことを整理してみます。</p>
+
+<p>最近の言語にある色々なものをバッサリ削った感じで、
+プログラミング言語に理想や夢を求める人にはあまり受け入れられない現実指向な言語かと思います。<br />
+初めて学ぶプログラミング言語として、 golang というのはアリかもしれないと思った。</p>
+
+<h3 id="標準ライブラリが充実している">標準ライブラリが充実している</h3>
+
+<p>今回作成したソースファイルは一つだけですが、以下の事を行っています。
+* HTTPクライアント
+* HTTPサーバ
+* JSONパース
+* 並行処理
+* ファイル出力
+* ファイル入力
+* タスクスケジューリング</p>
+
+<p>タスクスケジュール以外は、標準ライブラリでできてしまうところが凄い。<br />
+Javaだとサードパーティーのライブラリに頼っていたところが標準でできる感じです。</p>
+
+<h3 id="型宣言は-後置">型宣言は、後置</h3>
+
+<p>まー最近の言語は型推論とかあるので型宣言は後置の方が自然ですよね。他の言語にあるようなコロンは不要。</p>
+
+<pre><code class="language-go">var httpServer http.Server
+</code></pre>
+
+<h3 id="型推論">型推論</h3>
+
+<p>ローカル変数の型推論。初回代入はコロンが必要</p>
+
+<pre><code class="language-go">port := os.Getenv(&quot;PORT&quot;)
+</code></pre>
+
+<p>再代入は、コロンが不要。</p>
+
+<pre><code class="language-go">port = &quot;18888&quot;
+</code></pre>
+
+<h3 id="メソッド-メンバ関数-みたいなもの">メソッド(メンバ関数)みたいなもの</h3>
+
+<p>以下のような感じで関数名の前に構造体のポインタを宣言することでメソッドように使えるようになる。</p>
+
+<pre><code>func (a *App) healthcheck() {
+    // ...
+}
+</code></pre>
+
+<h3 id="複数行文字列リテラル">複数行文字列リテラル</h3>
+
+<p>ヒアドキュメントというか複数行文字列リテラル。<br />
+対象部分をバッククォートで括る。</p>
+
+<pre><code class="language-go">`
+{
+    &quot;cron&quot;: &quot;*/10 * * * * *&quot;,
+    &quot;port&quot;: 18888
+}
+`
+</code></pre>
+
+<h3 id="戻り値を複数返せる">戻り値を複数返せる</h3>
+
+<p>送り側</p>
+
+<pre><code class="language-go">func foo() (int, string) {
+    return 1, &quot;bar&quot;
+}
+</code></pre>
+
+<p>受け取り側</p>
+
+<pre><code class="language-go">num, str := foo()
+</code></pre>
+
+<p>アンスコで戻り値の一部を無視</p>
+
+<pre><code class="language-go">_, err := os.Stat(filename)
+</code></pre>
+
+<h3 id="jsonパース">JSONパース</h3>
+
+<p>JSONに対応する構造体を作る。</p>
+
+<pre><code class="language-go">type App struct {
+    Name string   `json:&quot;name&quot;`
+    URL  string   `json:&quot;url&quot;`
+}
+</code></pre>
+
+<p><code>json:&quot;XXX&quot;</code> がJSONのパース処理への注釈のようなものになっているらしい。<br />
+変数<code>Name</code>はJSONプロパティの<code>name</code>と対応するようになる。Javaだとアノテーションでやっているような事だと思う。</p>
+
+<pre><code class="language-go">import (json &quot;encoding/json&quot;)
+</code></pre>
+
+<pre><code class="language-go">json.Unmarshal(バイト配列, 格納する構造体)
+</code></pre>
+
+<h3 id="スコープ管理">スコープ管理？</h3>
+
+<p>大文字で始まる関数・変数は、public(export)扱いになって、小文字で始まると private 的な扱いになる。<br />
+この命名規則による仕様は、正直ビミョーだなーと思うところ。。</p>
+
+<h3 id="goroutine">Goroutine</h3>
+
+<p>golang の一番の特徴かもしれない goroutine<br />
+並行処理が軽量スレッドで簡単に実行できます。
+以下が例です。</p>
+
+<pre><code class="language-go">var wg sync.WaitGroup
+for i := 0; i &lt; len(hn.Apps); i++ {
+    go func(i int) {
+        wg.Add(1)
+        hn.Apps[i].healthcheck()
+        wg.Done()
+    }(i)
+}
+wg.Wait()
+</code></pre>
+
+<p><code>go</code> を付けた部分が並行で処理されます。<br />
+<code>wg.Wait()</code> ですべての処理が終了するのを待っています。</p>
+
+<h3 id="クロスコンパイル">クロスコンパイル</h3>
+
+<p>これも golang の一番の特徴かもしれない。<br />
+Windows で macOS, Linux のバイナリをコンパイルしたりできます。</p>
+
+<p>Windows</p>
+
+<pre><code>$ GOOS=windows GOARCH=amd64 go build
+</code></pre>
+
+<p>Linux</p>
+
+<pre><code>$ GOOS=linux GOARCH=amd64 go build
+</code></pre>
+
+<p>macOS</p>
+
+<pre><code>$ GOOS=darwin GOARCH=amd64 go build
+</code></pre>
+
+<p>シングルバイナリで実行でき、ポータビリティが高いのが特徴だと思った。</p>
+
+<h3 id="サードパーティーのライブラリ">サードパーティーのライブラリ</h3>
+
+<p>JSでいう npm , Java でいう Maven レポジトリみたいなものは存在せず、github とかのソースを直接引っ張ってくるみたい。<br />
+以下のような感じで <code>import</code> する。</p>
+
+<pre><code class="language-go">import (&quot;github.com/robfig/cron&quot;)
+</code></pre>
+
+<p>github から直接もってくると、そのライブラリの信頼性はどうなんだろうと少し不安になる。</p>
+
+<h3 id="ライブラリの依存管理">ライブラリの依存管理</h3>
+
+<p>dep というコマンドをインストールして管理する。</p>
+
+<p>dep をインストール</p>
+
+<pre><code>$ go get -u github.com/golang/dep/cmd/dep
+</code></pre>
+
+<p>設定ファイル(Gopkg.toml, Gopkg.lock)を生成</p>
+
+<pre><code>$ dep init
+</code></pre>
+
+<p>依存を<code>vendor</code>ディレクトリ配下にインストール</p>
+
+<pre><code>$ dep ensure
+</code></pre>
+
+<p>今まで、色んなツールがあったみたいですが、dep が標準になるっぽい。</p>
+
+<h3 id="エラーハンドリング">エラーハンドリング</h3>
+
+<p>golang には他の言語にあるような Exception がありません。<br />
+グローバルにエラーをハンドリングできず、細かくちゃんとエラーハンドリングしないとちょっとしたバグでプロセスが落ちてしまいそうです。</p>
+
+<h3 id="他の言語だと警告レベルのものがコンパイルエラーになって後回しにできない-未使用変数とか">他の言語だと警告レベルのものがコンパイルエラーになって後回しにできない。未使用変数とか。</h3>
+
+<h3 id="ないもの">ないもの</h3>
+
+<ul>
+<li>ジェネリクス</li>
+<li>例外</li>
+<li>class キーワード</li>
+<li>ラムダ・クロージャ</li>
+<li>golang特化のビルドツールみたいなもの(makeでやる感じかな)</li>
+</ul>
+
+<h2 id="github-について">GitHub について</h2>
+
+<p>今回、初めてリリースページを作ってみてコンパイル済みのバイナリをホスティングしてみた。</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/tomofummy">
+    <img class="avatar" src="https://example.org/images/avatar.png">
+    <div>
+        <span class="dark">Tomofumi Chiba</span>
+        <span>Software Engineer</span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fexample.org%2fpost%2f2017-10-29-golang%2f - Go%e8%a8%80%e8%aa%9e%28golang%29%e3%81%ae%e5%ad%a6%e7%bf%92%e3%81%8c%e3%81%a6%e3%82%89%20Healthcheck%20Notifier%20%e3%82%92%e4%bd%9c%e3%81%a3%e3%81%a6%e3%81%bf%e3%81%9f by @tomofummy"><span class="icon-twitter"> tweet</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "tomofumichiba" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/post/2017-08-15-introduction-doma/">Introducing Doma<aside class="dates">Aug 15 2017</aside></a>
+        </li>
+    
+        <li>
+            <a href="/post/2017-08-02-hello-world/">Hello World!<aside class="dates">Aug 2 2017</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/chibat">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.twitter.com/tomofummy">
+        circletwitterbird
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+        © Copyright 2017 Tomofumi Chiba
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://example.org/js/main.js"></script>
+<script src="https://example.org/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

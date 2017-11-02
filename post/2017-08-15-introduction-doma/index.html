@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Tomofumi Chiba">
+<meta name="description" content="Describe your website">
+<meta name="generator" content="Hugo 0.30" />
+<title>Introducing Doma</title>
+<link rel="shortcut icon" href="https://chibat.github.io/images/favicon.ico">
+<link rel="stylesheet" href="https://chibat.github.io/css/style.css">
+<link rel="stylesheet" href="https://chibat.github.io/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://chibat.github.io/css/monosocialiconsfont.css">
+
+
+
+<link href="https://chibat.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Tomofumi Chiba" />
+
+
+<meta property="og:title" content="Introducing Doma" />
+<meta property="og:description" content="Doma is a database access framework for Java.
+ github Japanese document  Doma is so cool !
+Doma has a Japanese document, but unfortunately there is no English document.
+Therefore I introduce Doma in English.
+Feature  Code generation and SQL file validation at compile time by Pluggable Annotation Processing API SQL template which is called &ldquo;2-way SQL&rdquo;. Usable only JRE. Don&rsquo;t have dependencies.  Doma has many other features." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chibat.github.io/post/2017-08-15-introduction-doma/" />
+
+
+
+<meta property="article:published_time" content="2017-08-15T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2017-08-15T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Introducing Doma">
+<meta itemprop="description" content="Doma is a database access framework for Java.
+ github Japanese document  Doma is so cool !
+Doma has a Japanese document, but unfortunately there is no English document.
+Therefore I introduce Doma in English.
+Feature  Code generation and SQL file validation at compile time by Pluggable Annotation Processing API SQL template which is called &ldquo;2-way SQL&rdquo;. Usable only JRE. Don&rsquo;t have dependencies.  Doma has many other features.">
+
+
+<meta itemprop="datePublished" content="2017-08-15T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2017-08-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="714">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Introducing Doma"/>
+<meta name="twitter:description" content="Doma is a database access framework for Java.
+ github Japanese document  Doma is so cool !
+Doma has a Japanese document, but unfortunately there is no English document.
+Therefore I introduce Doma in English.
+Feature  Code generation and SQL file validation at compile time by Pluggable Annotation Processing API SQL template which is called &ldquo;2-way SQL&rdquo;. Usable only JRE. Don&rsquo;t have dependencies.  Doma has many other features."/>
+<meta name="twitter:site" content="@https://www.twitter.com/tomofummy"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://chibat.github.io/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+ 		<a href='/about/'>About</a>
+  	
+
+	
+		<a class="cta" href="https://chibat.github.io/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Introducing Doma</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        August 15, 2017
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<p>Doma is a database access framework for Java.</p>
+
+<ul>
+<li><a href="https://github.com/domaframework/doma">github</a></li>
+<li><a href="http://doma.readthedocs.io/ja/stable/">Japanese document</a></li>
+</ul>
+
+<p>Doma is so cool !<br />
+Doma has a Japanese document, but unfortunately there is no English document.<br />
+Therefore I introduce Doma in English.</p>
+
+<h2 id="feature">Feature</h2>
+
+<ul>
+<li>Code generation and SQL file validation at compile time by <a href="https://www.jcp.org/en/jsr/detail?id=269">Pluggable Annotation Processing API</a></li>
+<li>SQL template which is called &ldquo;2-way SQL&rdquo;.</li>
+<li>Usable only JRE. Don&rsquo;t have dependencies.</li>
+</ul>
+
+<p>Doma has many other features.</p>
+
+<h2 id="about-2-way-sql">About 2-way SQL</h2>
+
+<p>selectByAgeRange.sql</p>
+
+<pre><code class="language-sql">select /*%expand*/* from employee
+where
+/*%if min != null */
+  age &gt;= /* min */10
+/*%end */
+/*%if max != null */
+  and
+  age &lt;= /* max */70
+/*%end */
+order by age
+</code></pre>
+
+<p>You can build SQL with SQL comment.<br />
+<code>min</code> and <code>max</code> are mapped Java method parameters.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<h3 id="prerequisites">Prerequisites</h3>
+
+<p>Install <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK 8</a>.</p>
+
+<h3 id="clone-boilerplate-project">Clone boilerplate project</h3>
+
+<p>Clone <code>simple-boilerplate</code> repository from GitHub.</p>
+
+<pre><code>$ git clone https://github.com/domaframework/simple-boilerplate.git
+</code></pre>
+
+<h3 id="dao-class">Dao class</h3>
+
+<p>See <code>src/main/java/boilerplate/dao/EmployeeDao.java</code>.</p>
+
+<pre><code class="language-java">@Dao(config = AppConfig.class)
+public interface EmployeeDao {
+
+    @Select
+    List&lt;Employee&gt; selectAll();
+
+    @Select
+    Employee selectById(Integer id);
+
+    @Insert
+    int insert(Employee employee);
+
+    @Update
+    int update(Employee employee);
+
+    @Delete
+    int delete(Employee employee);
+}
+</code></pre>
+
+<p>You only make Dao interface.<br />
+Implemation class is generated by Pluggable Annotation Processing API.</p>
+
+<h3 id="select">Select</h3>
+
+<p>Call Dao method which is annotated <code>@Select</code>, when executing <code>select</code> process.</p>
+
+<p>Check the following code in <code>EmployeeDao.java</code>.</p>
+
+<pre><code class="language-java">@Select
+Employee selectById(Integer id);
+</code></pre>
+
+<p>Check the following SQL(src/main/resources/META-INF/boilerplate/dao/EmployeeDao/selectById.sql).</p>
+
+<pre><code class="language-sql">select
+    /*%expand*/*
+from
+    employee
+where
+    id = /* id */0
+</code></pre>
+
+<p><code>/*%expand*/*</code> is replaced to field names which is based return type(Entity class) of Dao class.<br />
+<code>id</code> is binded to Java method parameters.<br />
+<code>0</code> at the back is the test data.<br />
+You can easily check syntax error in SQL with SQL tool, because test data exist.<br />
+Test data is not used when executing Java programs.</p>
+
+<p>Check the code in <code>EmployeeDaoTest.java</code>.</p>
+
+<pre><code class="language-java">@Test
+public void testSelectById() {
+    TransactionManager tm = AppConfig.singleton().getTransactionManager();
+    tm.required(() -&gt; {
+        Employee employee = dao.selectById(1);
+        assertNotNull(employee);
+        assertEquals(&quot;ALLEN&quot;, employee.name);
+        assertEquals(Integer.valueOf(30), employee.age);
+        assertEquals(Integer.valueOf(0), employee.version);
+    });
+}
+</code></pre>
+
+<p>Execute by JUnit.</p>
+
+<pre><code>$ ./gradlew test
+</code></pre>
+
+<p>The following SQL is the actual SQL to be executed.</p>
+
+<pre><code class="language-sql">select
+    age, id, name, version
+from
+    employee
+where
+    id = 1
+</code></pre>
+
+<h3 id="insert">Insert</h3>
+
+<p>Call Dao method which is annotated <code>@Insert</code>, when executing <code>insert</code> process.</p>
+
+<p>Check the following code in <code>EmployeeDao.java</code>.</p>
+
+<pre><code class="language-java">@Insert
+int insert(Employee employee);
+</code></pre>
+
+<p>Add the following code in <code>EmployeeDaoTest.java</code></p>
+
+<pre><code class="language-java">@Test
+public void testInsert() {
+    TransactionManager tm = AppConfig.singleton().getTransactionManager();
+
+    Employee employee = new Employee();
+
+    // first transaction
+    // execute INSERT
+    tm.required(() -&gt; {
+        employee.name = &quot;HOGE&quot;;
+        employee.age = 20;
+        dao.insert(employee);
+        assertNotNull(employee.id);
+    });
+
+    // second transaction
+    // check that the INSERT was successful.
+    tm.required(() -&gt; {
+        Employee employee2 = dao.selectById(employee.id);
+        assertEquals(&quot;HOGE&quot;, employee2.name);
+        assertEquals(Integer.valueOf(20), employee2.age);
+        assertEquals(Integer.valueOf(1), employee2.version);
+    });
+}
+</code></pre>
+
+<p>Execute by JUnit.</p>
+
+<p>The following SQL is the actual SQL to be executed.</p>
+
+<pre><code class="language-sql">insert into Employee (age, id, name, version) values (20, 100, 'HOGE', 1)
+</code></pre>
+
+<p>The identifier and version number are set automatically.</p>
+
+<h3 id="update">Update</h3>
+
+<p>Call Dao method which is annotated <code>@Update</code>, when executing <code>update</code> process.</p>
+
+<p>Check the following code in <code>EmployeeDao.java</code>.</p>
+
+<pre><code class="language-java">@Update
+int update(Employee employee);
+</code></pre>
+
+<p>Add the following code in <code>EmployeeDaoTest.java</code></p>
+
+<pre><code class="language-java">@Test
+public void testUpdate() {
+    TransactionManager tm = AppConfig.singleton().getTransactionManager();
+
+    // first transaction
+    // update the age field after searching
+    tm.required(() -&gt; {
+        Employee employee = dao.selectById(1);
+        assertEquals(&quot;ALLEN&quot;, employee.name);
+        assertEquals(Integer.valueOf(30), employee.age);
+        assertEquals(Integer.valueOf(0), employee.version);
+        employee.age = 50;
+        dao.update(employee);
+        assertEquals(Integer.valueOf(1), employee.version);
+    });
+
+    // second transaction
+    // check that the UPDATE was successful.
+    tm.required(() -&gt; {
+        Employee employee = dao.selectById(1);
+        assertEquals(&quot;ALLEN&quot;, employee.name);
+        assertEquals(Integer.valueOf(50), employee.age);
+        assertEquals(Integer.valueOf(1), employee.version);
+    });
+}
+</code></pre>
+
+<p>The following SQL is the actual SQL to be executed.</p>
+
+<pre><code class="language-sql">update Employee set age = 50, name = 'ALLEN', version = 0 + 1 where id = 1 and version = 0
+</code></pre>
+
+<p>The version number for optimistic exclusive control is automatically incremented.</p>
+
+<h3 id="delete">Delete</h3>
+
+<p>Call Dao method which is annotated <code>@Delete</code>, when executing <code>delete</code> process.</p>
+
+<p>Check the following code in <code>EmployeeDao.java</code>.</p>
+
+<pre><code class="language-java">@Delete
+int delete(Employee employee);
+</code></pre>
+
+<p>Add the following code in <code>EmployeeDaoTest.java</code></p>
+
+<pre><code class="language-java">@Test
+public void testDelete() {
+    TransactionManager tm = AppConfig.singleton().getTransactionManager();
+
+    // first transaction
+    // execute DELETE
+    tm.required(() -&gt; {
+        Employee employee = dao.selectById(1);
+        dao.delete(employee);
+    });
+
+    // second transaction
+    // check that the DELETE was successful.
+    tm.required(() -&gt; {
+        Employee employee = dao.selectById(1);
+        assertNull(employee);
+    });
+}
+</code></pre>
+
+<p>Execute by JUnit.</p>
+
+<p>The following SQL is the actual SQL to be executed.</p>
+
+<pre><code class="language-sql">delete from Employee where id = 1 and version = 0
+</code></pre>
+
+<p>In addition to the identifier, the version number is also specified as the search condition.</p>
+
+<h2 id="eclipse-plugin">Eclipse plugin</h2>
+
+<p>Doma has a useful Eclipse plugin.<br />
+The plugin compile Java sources, when the SQL file is saved.</p>
+
+<p><a href="http://dl.bintray.com/domaframework/eclipse/">http://dl.bintray.com/domaframework/eclipse/</a></p>
+
+<p>That&rsquo;s it.</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/tomofummy">
+    <img class="avatar" src="https://chibat.github.io/images/avatar.png">
+    <div>
+        <span class="dark">Tomofumi Chiba</span>
+        <span>Software Engineer</span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fchibat.github.io%2fpost%2f2017-08-15-introduction-doma%2f - Introducing%20Doma by @tomofummy"><span class="icon-twitter"> tweet</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "tomofumichiba" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/post/2017-11-02-golang/">Go言語の学習がてら Healthcheck Notifier を作ってみた<aside class="dates">Nov 2 2017</aside></a>
+        </li>
+    
+        <li>
+            <a href="/post/2017-08-02-hello-world/">Hello World!<aside class="dates">Aug 2 2017</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/chibat">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.twitter.com/tomofummy">
+        circletwitterbird
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+        © Copyright 2017 Tomofumi Chiba
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://chibat.github.io/js/main.js"></script>
+<script src="https://chibat.github.io/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-104908950-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>
