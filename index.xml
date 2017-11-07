@@ -18,7 +18,7 @@
       
       <guid>https://chibat.github.io/post/2017-11-02-golang/</guid>
       <description>以前から、Go言語(golang)をちょっとやってみたりしてたんですが、実用的なものを作ってみたいと思い、 Healthcheck Notifier というものを作ってみました。
-一つソースファイルでできているとてもシンプルなものです。
+一つのソースファイルでできているとてもシンプルなものです。
 Healthcheck Notifier
 Webアプリケーションに対し、ヘルスチェックのリクエストを投げ、ステータスコード200以外が返答された場合、Alert を HipChat やメールで通知します。
 クイックスタート リリースページからバイナリをダウンロードします。
