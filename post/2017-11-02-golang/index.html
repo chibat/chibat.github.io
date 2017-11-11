@@ -33,6 +33,7 @@ Windows, macOS, Linux のバイナリがあります。
 以下のURLをWebブラウザで開いてみてください。
 http://localhost:18888/
 以下は、スクリーンショットです。
+
 仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
 起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
 { &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example." />
@@ -69,6 +70,7 @@ Windows, macOS, Linux のバイナリがあります。
 以下のURLをWebブラウザで開いてみてください。
 http://localhost:18888/
 以下は、スクリーンショットです。
+
 仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
 起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
 { &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example.">
@@ -94,6 +96,7 @@ Windows, macOS, Linux のバイナリがあります。
 以下のURLをWebブラウザで開いてみてください。
 http://localhost:18888/
 以下は、スクリーンショットです。
+
 仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
 起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
 { &quot;cron&quot;: &quot;*/10 * * * * *&quot;, &quot;port&quot;: 18888, &quot;hipchat-proxy&quot;: &quot;&quot;, &quot;hipchat-subdomain&quot;: &quot;hipchat-subdomain&quot;, &quot;smtp-server&quot;: &quot;localhost:25&quot;, &quot;mail-address-from&quot;: &quot;from@example.com&quot;, &quot;apps&quot;: [ { &quot;name&quot;: &quot;self&quot;, &quot;url&quot;: &quot;http://localhost:18888/&quot;, &quot;proxy&quot;: &quot;&quot;, &quot;hipchat-room&quot;: &quot;1234567&quot;, &quot;hipchat-token&quot;: &quot;&quot;, &quot;mail-address-to-down&quot;: [&quot;to1@example."/>
@@ -155,7 +158,7 @@ Windows, macOS, Linux のバイナリがあります。</p>
 
 <p>以下は、スクリーンショットです。</p>
 
-<p><img src="/images/monitor.png" alt="monitor" /></p>
+<p><a href="/images/monitor.png"><img alt="monitor" src="/images/monitor.png"></a></p>
 
 <h2 id="仕様">仕様</h2>
 

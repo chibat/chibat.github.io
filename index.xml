@@ -28,6 +28,7 @@ Windows, macOS, Linux のバイナリがあります。
 以下のURLをWebブラウザで開いてみてください。
 http://localhost:18888/
 以下は、スクリーンショットです。
+
 仕様  監視対象のアプリケーションがヘルスチェックエラーになるとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。連続してエラーになる場合、通知はしません。 ヘルスチェックエラー後、ヘルスチェック成功を確認するとHipChatの設定された Room に通知し、設定されたメールアドレスにメール送信します。  設定ファイル Healthcheck Notifier は、起動時に設定ファイルが存在しない場合、自分自身のアプリケーションを監視するような設定ファイルを例として作成します。この設定ファイルを書き換えます。
 起動したディレクトリに以下のようなconfig.jsonが作成されていると思います。
 { &amp;quot;cron&amp;quot;: &amp;quot;*/10 * * * * *&amp;quot;, &amp;quot;port&amp;quot;: 18888, &amp;quot;hipchat-proxy&amp;quot;: &amp;quot;&amp;quot;, &amp;quot;hipchat-subdomain&amp;quot;: &amp;quot;hipchat-subdomain&amp;quot;, &amp;quot;smtp-server&amp;quot;: &amp;quot;localhost:25&amp;quot;, &amp;quot;mail-address-from&amp;quot;: &amp;quot;from@example.com&amp;quot;, &amp;quot;apps&amp;quot;: [ { &amp;quot;name&amp;quot;: &amp;quot;self&amp;quot;, &amp;quot;url&amp;quot;: &amp;quot;http://localhost:18888/&amp;quot;, &amp;quot;proxy&amp;quot;: &amp;quot;&amp;quot;, &amp;quot;hipchat-room&amp;quot;: &amp;quot;1234567&amp;quot;, &amp;quot;hipchat-token&amp;quot;: &amp;quot;&amp;quot;, &amp;quot;mail-address-to-down&amp;quot;: [&amp;quot;to1@example.</description>
