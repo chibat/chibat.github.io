@@ -16,7 +16,7 @@ async function start() {
   await denoRun([
     "--allow-net=:4507",
     "--allow-read",
-    "https://deno.land/std@0.106.0/http/file_server.ts",
+    "https://deno.land/std@0.202.0/http/file_server.ts",
     "docs",
   ]);
 }
