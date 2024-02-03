@@ -1,98 +1,73 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.4/dist/terminal.min.css" />
+  <!--
+  <link href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+-->
+  <link rel="stylesheet" href="https://unpkg.com/bamboo.css/dist/light.min.css">
   <link rel="icon" href="https://pages.github.com/favicon.ico">
   <title>Tomofumi Chiba</title>
   <style>
-    .components-grid {
-      display: grid;
-      grid-column-gap: 1.4em;
-      grid-template-columns: auto;
-      grid-template-rows: auto;
+    a:link {
+      color: cornflowerblue;
     }
 
-    .image-grid {
-      display: grid;
-      grid-template-rows: auto;
-      grid-gap: 1em;
-      grid-template-columns: repeat(auto-fit,
-          minmax(calc(var(--page-width) / 12), 1fr));
+    a:visited {
+      color: cornflowerblue;
     }
 
-    @media only screen and (min-width: 70em) {
-      .components-grid {
-        grid-template-columns: 3fr 9fr;
-      }
-
-      .components-grid aside {
-        position: sticky;
-        top: calc(var(--global-space) * 2);
-      }
+    a:hover {
+      color: royalblue
     }
 
-    :root {
-      --global-font-size: 15px;
-      --global-line-height: 1.4em;
-      --global-space: 10px;
-      --font-stack: Menlo, Monaco, Lucida Console, Liberation Mono,
-        DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace,
-        serif;
-      --mono-font-stack: Menlo, Monaco, Lucida Console, Liberation Mono,
-        DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace,
-        serif;
-      --background-color: #222225;
-      --page-width: 60em;
-      --font-color: #e8e9ed;
-      --invert-font-color: #222225;
-      --secondary-color: #a3abba;
-      --tertiary-color: #a3abba;
-      --primary-color: #62c4ff;
-      --error-color: #ff3c74;
-      --progress-bar-background: #3f3f44;
-      --progress-bar-fill: #62c4ff;
-      --code-bg-color: #3f3f44;
-      --input-style: solid;
-      --display-h1-decoration: none;
-    }
-
-    li {
-      line-height: 1.8;
+    a:active {
+      color: cornflowerblue;
     }
   </style>
 </head>
 
-<body class="terminal">
-  <div class="container">
-    <div class="terminal-nav">
-      <header class="terminal-logo">
-        <div class="logo terminal-prompt"><a href="/" class="no-style">Tomofumi Chiba</a></div>
-      </header>
-    </div>
-    <p>Software Engineer</p>
-    <p>I like TypeScript, Deno, Java, Gradle, Spring Boot, Doma, OpenAPI Generator, Vim, and so on.</p>
-    <h1>Social Links</h1>
-    <ul>
-      <li><a target="_blank" href="https://github.com/chibat">GitHub</a></li>
-      <li><a target="_blank" href="https://leaves.chiba.dev/users/1">Leaves 🍃</a></li>
-      <li><a target="_blank" href="https://twitter.com/tomofummy">twitter.com</a></li>
-      <li><a target="_blank" href="https://zenn.dev/chiba">Zenn</a></li>
-      <li><a target="_blank" href="https://qiita.com/chibato">Qiita</a></li>
-      <li><a target="_blank" href="https://www.credly.com/users/tomofumi-chiba/badges">Credly</a></li>
-      <li><a target="_blank" href="https://soundcloud.com/chibato">SoundCloud</a></li>
-      <li><a target="_blank" href="https://www.bandlab.com/chibat">BandLab</a> </li>
-      <li><a target="_blank" href="https://bsky.app/profile/chiba.dev"> Bluesky</a></li>
-    </ul>
-    <h1>Portfolio</h1>
-    <ul>
-      <li><a target="_blank" href="https://leaves.chiba.dev/">Leaves 🍃</a> </li>
-      <li><a target="_blank" href="https://chiba.dev/tools">Tools 🔧 </a></li>
-      <li><a target="_blank" href="https://ogp.deno.dev/">Open Graph Preview</a></li>
-    </ul>
-  </div>
+<body>
+  <h1>Tomofumi Chiba</h1>
+  <img src="https://avatars3.githubusercontent.com/u/3880201?s=100&v=4" alt="avator" style="border-radius: 50%;" />
+  <p>Software Engineer</p>
+  <small>I like TypeScript, Deno, Java, Gradle, Spring Boot, Doma, OpenAPI Generator, Vim, and so on.</small>
+  <h2><a target="_blank" href="https://github.com/chibat"><img src="github.png" alt="github" style="width: 25px;" />
+      GitHub</a></h2>
+  <h2><a target="_blank" href="https://twitter.com/tomofummy"><img src="https://abs.twimg.com/favicons/twitter.3.ico"
+        alt="X" style="width: 25px;" /> X</a></h2>
+  <h2><a target="_blank" href="https://zenn.dev/chiba">
+      <img src="https://zenn.dev/favicon.ico" alt="Zenn" style="width: 25px;" /> Zenn</a></h2>
+  <h2><a target="_blank" href="https://qiita.com/chibato">
+      <img src="https://cdn.qiita.com/assets/public/qiita-pwa-icon_48-73e8e2badc0fb7f99811140892c7d7aa.png" alt="qiita"
+        style="width: 25px;" /> Qiita</a></h2>
+<!--
+  <h2><a target="_blank" href="https://gist.github.com/chibat"><img src="github.png" style="width: 25px;" /> GitHub
+      Gist</a></h2>
+-->
+  <h2><a target="_blank" href="https://www.credly.com/users/tomofumi-chiba/badges"><img
+        src="https://www.credly.com/favicon.ico" style="width: 25px;" /> Credly</a></h2>
+  <h2><a target="_blank" href="https://soundcloud.com/chibato"> <img
+        src="https://a-v2.sndcdn.com/assets/images/sc-icons/favicon-2cadd14bdb.ico" style="width: 25px;" />
+      SoundCloud</a></h2>
+  <h2><a target="_blank" href="https://www.bandlab.com/chibat"> <img
+        src="https://www.bandlab.com/web-app/images/favicons/favicon-b4bc5d2d24.ico" style="width: 25px;" /> BandLab</a>
+  </h2>
+  <h2><a target="_blank" href="https://bsky.app/profile/chiba.dev"><img
+        src="https://bsky.app/static/favicon-32x32.png" alt="Bluesky" style="width: 25px;" /> Bluesky</a></h2>
+  <!--
+      <a target="_blank" href="https://bitbucket.org/chibat/" ><img src="https://bitbucket.org/favicon.ico" style="width: 25px;" /> Bitbucket</a>
+  <h2><a target="_blank" href="https://chibat.github.io/blog/" ><img src="github.png" style="width: 25px;" /> Blog</a></h2>
+      <a href="/gist-search.html" >gist search</a>
+      -->
+  <hr />
+  <h2>Portfolio</h2>
+  <h2><a target="_blank" href="https://leaves.chiba.dev/"> <img src="leaves.ico" style="width: 25px;" /> Leaves</a></h2>
+  <h2><a target="_blank" href="https://chiba.dev/tools">🔧 Tools</a></h2>
+  <h2><a target="_blank" href="https://ogp.deno.dev/">Open Graph Preview</a></h2>
 </body>
 
 </html>
