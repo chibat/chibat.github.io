@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "start": "deno run --allow-net=:4507 --allow-read jsr:@std/http@0.224.4/file-server docs",
+    "deploy": "git add . && git commit -m deploy && git push"
+  }
+}
